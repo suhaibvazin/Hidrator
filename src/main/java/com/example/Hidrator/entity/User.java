@@ -1,5 +1,6 @@
 package com.example.Hidrator.entity;
 
+import com.example.Hidrator.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +31,8 @@ public class User implements UserDetails {
     private String password;
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
