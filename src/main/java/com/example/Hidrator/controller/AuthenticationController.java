@@ -2,6 +2,7 @@ package com.example.Hidrator.controller;
 
 import com.example.Hidrator.dto.AuthenticationDTO;
 import com.example.Hidrator.dto.AuthenticationResponse;
+import com.example.Hidrator.exception.AuthException;
 import com.example.Hidrator.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.registerUser(authenticationDTO));
     }
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationDTO authenticationDTO){
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationDTO authenticationDTO) throws AuthException {
         return ResponseEntity.ok(authenticationService.authenticateUser(authenticationDTO));
     }
     @GetMapping ("/generateRestToken")

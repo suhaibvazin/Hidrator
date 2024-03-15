@@ -5,12 +5,16 @@ import com.example.Hidrator.dto.AuthenticationDTO;
 import com.example.Hidrator.dto.AuthenticationResponse;
 import com.example.Hidrator.entity.Token;
 import com.example.Hidrator.entity.User;
+import com.example.Hidrator.exception.AuthException;
 import com.example.Hidrator.repository.TokenRepository;
 import com.example.Hidrator.repository.UserRepository;
 import com.example.Hidrator.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -50,10 +55,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
 
-    public AuthenticationResponse authenticateUser(AuthenticationDTO request){
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
+    public AuthenticationResponse authenticateUser(AuthenticationDTO request) throws AuthException {
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
+        }catch(Exception e){
+            throw new AuthException("error occured during authentication");
+        }
 
         User returnedUser=userRepository.findByUsername(request.getUsername()).orElseThrow();
         //generate token
