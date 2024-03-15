@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("test")
 public class TestController {
-    @GetMapping("doTest")
+    @GetMapping("test")
     public String doTest(){
         return "API test- it's working!!!!!!!!";
     }

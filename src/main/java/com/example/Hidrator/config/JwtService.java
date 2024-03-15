@@ -25,7 +25,7 @@ public class JwtService {
        String token = Jwts.builder()
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()*24*60*60*1000))
+                .setExpiration(new Date(new Date().getTime() + 3600000))
                 .signWith(getSigningKey())
                 .compact();
        return token;
