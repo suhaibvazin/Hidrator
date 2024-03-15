@@ -21,11 +21,16 @@ public class JwtService {
 
     String SECRET_KEY = "afytuh123456hhijsknmko890fdfygiuijjoj2345kjjhggh";
 
-    public String generateToken(User user){
+    public String generateToken(User user,boolean isPasswordReset){
+        long time= 3600000;
+        if (isPasswordReset){
+            time=300000;
+        }
+        Date expiry= new Date(new Date().getTime() + time);
        String token = Jwts.builder()
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(new Date().getTime() + 3600000))
+                .setExpiration(expiry)
                 .signWith(getSigningKey())
                 .compact();
        return token;

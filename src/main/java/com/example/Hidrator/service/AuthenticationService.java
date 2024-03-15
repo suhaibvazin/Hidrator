@@ -6,4 +6,6 @@ import com.example.Hidrator.dto.AuthenticationResponse;
 public interface AuthenticationService {
     public AuthenticationResponse authenticateUser(AuthenticationDTO request);
     public AuthenticationResponse registerUser(AuthenticationDTO request);
+    public AuthenticationResponse resetPassword(AuthenticationDTO request);
+    public AuthenticationResponse generateResetPasswordToken(AuthenticationDTO request);
 }

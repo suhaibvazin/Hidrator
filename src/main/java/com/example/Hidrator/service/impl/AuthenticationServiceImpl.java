@@ -39,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User savedUser = userRepository.save(user);
 
-        String jwtToken =jwtService.generateToken(savedUser);
+        String jwtToken =jwtService.generateToken(savedUser,false);
 
         //save the token
         saveUserToken(jwtToken,savedUser);
@@ -47,6 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new AuthenticationResponse(jwtToken,"User Registration successful");
 
     }
+
 
     public AuthenticationResponse authenticateUser(AuthenticationDTO request){
 
@@ -56,7 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User returnedUser=userRepository.findByUsername(request.getUsername()).orElseThrow();
         //generate token
 
-       String jwtToken= jwtService.generateToken(returnedUser);
+       String jwtToken= jwtService.generateToken(returnedUser,false);
         //revoke all token
         revokeAllToken(returnedUser);
         //save the user token
@@ -64,6 +65,37 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return (new AuthenticationResponse(jwtToken,"user login was successful"));
     }
+
+    public AuthenticationResponse generateResetPasswordToken(AuthenticationDTO request) {
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        //generate password reset token
+        String token = jwtService.generateToken(user,true);
+        Token tokenObj = Token.builder()
+                .user(user)
+                .token(token)
+                .build();
+        tokenRepository.save(tokenObj);
+        return (new AuthenticationResponse(token,"password reset token generated"));
+    }
+
+    public AuthenticationResponse resetPassword(AuthenticationDTO request) {
+        String token= request.getToken();
+        if (token==null){
+//            return new AuthenticationResponse(null,"Token  is null cant reset password");
+            throw new RuntimeException("Token  is null cant reset password");
+        }
+        User user = userRepository.findByToken(token).orElseThrow();
+
+        if(jwtService.isValid(token,user)){
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            userRepository.save(user);
+        }
+        Token deteleToken = tokenRepository.findByToken(token).orElseThrow();
+        tokenRepository.delete(deteleToken);
+        return new AuthenticationResponse(null,"password reset successful");
+    }
+
+
 
     private void revokeAllToken(User returnedUser) {
         List<Token> tokens = tokenRepository.findAllTokenByUser(returnedUser.getId());

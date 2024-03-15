@@ -20,5 +20,15 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationDTO authenticationDTO){
         return ResponseEntity.ok(authenticationService.authenticateUser(authenticationDTO));
     }
+    @GetMapping ("/generateRestToken")
+    public ResponseEntity<AuthenticationResponse> generateResetToken(@RequestBody AuthenticationDTO authenticationDTO){
+        return ResponseEntity.ok(authenticationService.generateResetPasswordToken(authenticationDTO));
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<AuthenticationResponse> resetPassword(@RequestBody AuthenticationDTO authenticationDTO){
+        return ResponseEntity.ok(authenticationService.resetPassword(authenticationDTO));
+    }
+
 
 }

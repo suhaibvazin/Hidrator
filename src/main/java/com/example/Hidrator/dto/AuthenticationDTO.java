@@ -18,4 +18,5 @@ public class AuthenticationDTO {
     private String username;
     private String password;
     private Role role;
+    private String token;
 }
