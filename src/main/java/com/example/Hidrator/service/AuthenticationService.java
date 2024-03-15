@@ -8,4 +8,5 @@ public interface AuthenticationService {
     public AuthenticationResponse registerUser(AuthenticationDTO request);
     public AuthenticationResponse resetPassword(AuthenticationDTO request);
     public AuthenticationResponse generateResetPasswordToken(AuthenticationDTO request);
+    public AuthenticationResponse logout(AuthenticationDTO request);
 }

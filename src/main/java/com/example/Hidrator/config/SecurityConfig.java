@@ -39,7 +39,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req->req.requestMatchers("/login/**","/register/**").permitAll()
+                .authorizeHttpRequests(req->req.requestMatchers("/login/**","/register/**","/logoutUser/**").permitAll()
                         .requestMatchers("/admin_only/**").hasAnyAuthority("ADMIN").anyRequest().authenticated())
                 .userDetailsService(userDetailsService).sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

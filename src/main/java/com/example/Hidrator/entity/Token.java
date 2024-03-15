@@ -16,8 +16,8 @@ public class Token {
     private Long id;
 
     private String token;
-
-    private Boolean isLoggedOut;
+    @Column(name = "logged_out")
+    private Boolean loggedout;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

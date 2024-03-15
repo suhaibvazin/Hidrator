@@ -11,6 +11,7 @@ import com.example.Hidrator.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -81,7 +82,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse resetPassword(AuthenticationDTO request) {
         String token= request.getToken();
         if (token==null){
-//            return new AuthenticationResponse(null,"Token  is null cant reset password");
             throw new RuntimeException("Token  is null cant reset password");
         }
         User user = userRepository.findByToken(token).orElseThrow();
@@ -95,6 +95,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new AuthenticationResponse(null,"password reset successful");
     }
 
+    public AuthenticationResponse logout(AuthenticationDTO request) {
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        //revoking all token
+        revokeAllToken(user);
+        //clearing security context
+        SecurityContextHolder.clearContext();
+        return new AuthenticationResponse(null,"successfully logged out");
+    }
+
 
 
     private void revokeAllToken(User returnedUser) {
@@ -103,14 +112,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if(tokens.isEmpty()){
             return;
         }
-        tokens.forEach(t->t.setIsLoggedOut(true));
+        tokens.forEach(t->t.setLoggedout(true));
         tokenRepository.saveAll(tokens);
     }
 
     private void saveUserToken(String jwtToken, User savedUser) {
         Token token = Token.builder()
                 .token(jwtToken)
-                .isLoggedOut(false)
+                .loggedout(false)
                 .user(savedUser)
                 .build();
         tokenRepository.save(token);

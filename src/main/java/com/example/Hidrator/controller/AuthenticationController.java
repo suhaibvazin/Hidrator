@@ -30,5 +30,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.resetPassword(authenticationDTO));
     }
 
+    @PostMapping("/logoutUser")
+    public ResponseEntity<AuthenticationResponse> logout(@RequestBody AuthenticationDTO authenticationDTO){
+        return ResponseEntity.ok(authenticationService.logout(authenticationDTO));
+    }
+
 
 }
