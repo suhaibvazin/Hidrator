@@ -29,9 +29,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse registerUser(AuthenticationDTO request){
+    public AuthenticationResponse registerUser(AuthenticationDTO request) throws AuthException {
         if(userRepository.findByUsername(request.getUsername()).isPresent()){
-            return new AuthenticationResponse("null","User already exist");
+            throw new AuthException("User already exist");
         }
         User user = User.builder()
                 .firstName(request.getFirstName())
@@ -87,9 +87,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public AuthenticationResponse resetPassword(AuthenticationDTO request) {
         String token= request.getToken();
-        if (token==null){
-            throw new RuntimeException("Token  is null cant reset password");
-        }
         User user = userRepository.findByToken(token).orElseThrow();
 
         if(jwtService.isValid(token,user)){

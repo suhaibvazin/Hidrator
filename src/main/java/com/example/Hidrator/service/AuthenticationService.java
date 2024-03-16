@@ -5,9 +5,9 @@ import com.example.Hidrator.dto.AuthenticationResponse;
 import com.example.Hidrator.exception.AuthException;
 
 public interface AuthenticationService {
-    public AuthenticationResponse authenticateUser(AuthenticationDTO request) throws AuthException;
-    public AuthenticationResponse registerUser(AuthenticationDTO request);
-    public AuthenticationResponse resetPassword(AuthenticationDTO request);
-    public AuthenticationResponse generateResetPasswordToken(AuthenticationDTO request);
-    public AuthenticationResponse logout(AuthenticationDTO request);
+     AuthenticationResponse authenticateUser(AuthenticationDTO request) throws AuthException;
+     AuthenticationResponse registerUser(AuthenticationDTO request) throws AuthException;
+     AuthenticationResponse resetPassword(AuthenticationDTO request);
+     AuthenticationResponse generateResetPasswordToken(AuthenticationDTO request);
+     AuthenticationResponse logout(AuthenticationDTO request);
 }
