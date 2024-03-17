@@ -1,6 +1,6 @@
 package com.example.Hidrator.service.impl;
 
-import com.example.Hidrator.repository.UserRepository;
+import com.example.Hidrator.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("user name not found:"+username));
+        return authRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("user name not found:"+username));
     }
 }

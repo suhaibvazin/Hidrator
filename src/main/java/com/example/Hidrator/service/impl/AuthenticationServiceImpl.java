@@ -7,7 +7,7 @@ import com.example.Hidrator.entity.Token;
 import com.example.Hidrator.entity.User;
 import com.example.Hidrator.exception.AuthException;
 import com.example.Hidrator.repository.TokenRepository;
-import com.example.Hidrator.repository.UserRepository;
+import com.example.Hidrator.repository.AuthRepository;
 import com.example.Hidrator.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse registerUser(AuthenticationDTO request) throws AuthException {
-        if(userRepository.findByUsername(request.getUsername()).isPresent()){
+        if(authRepository.findByUsername(request.getUsername()).isPresent()){
             throw new AuthException("User already exist");
         }
         User user = User.builder()
@@ -41,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .role(request.getRole())
                 .build();
 
-        User savedUser = userRepository.save(user);
+        User savedUser = authRepository.save(user);
 
         String jwtToken =jwtService.generateToken(savedUser,false);
 
@@ -61,7 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new AuthException("error occured during authentication");
         }
 
-        User returnedUser=userRepository.findByUsername(request.getUsername()).orElseThrow();
+        User returnedUser= authRepository.findByUsername(request.getUsername()).orElseThrow();
         //generate token
 
        String jwtToken= jwtService.generateToken(returnedUser,false);
@@ -74,7 +74,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public AuthenticationResponse generateResetPasswordToken(AuthenticationDTO request) {
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        User user = authRepository.findByUsername(request.getUsername()).orElseThrow();
         //generate password reset token
         String token = jwtService.generateToken(user,true);
         Token tokenObj = Token.builder()
@@ -87,11 +87,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public AuthenticationResponse resetPassword(AuthenticationDTO request) {
         String token= request.getToken();
-        User user = userRepository.findByToken(token).orElseThrow();
+        User user = authRepository.findByToken(token).orElseThrow();
 
         if(jwtService.isValid(token,user)){
             user.setPassword(passwordEncoder.encode(request.getPassword()));
-            userRepository.save(user);
+            authRepository.save(user);
         }
         Token deteleToken = tokenRepository.findByToken(token).orElseThrow();
         tokenRepository.delete(deteleToken);
@@ -99,7 +99,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public AuthenticationResponse logout(AuthenticationDTO request) {
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        User user = authRepository.findByUsername(request.getUsername()).orElseThrow();
         //revoking all token
         revokeAllToken(user);
         //clearing security context
