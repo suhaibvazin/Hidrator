@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String username;
     @Column(name = "password")
     private String password;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Token> tokens;
     @Enumerated(EnumType.STRING)
     private Role role;
