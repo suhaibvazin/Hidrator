@@ -21,12 +21,14 @@ public class GlobalExceptionHandler  {
     @ExceptionHandler(AuthValidationException.class)
     public ResponseEntity<ExceptionResponse> handleAuthValidationException(AuthValidationException ex){
         log.error("Error occurred during validation, status:"+HttpStatus.BAD_REQUEST.value()+"->"+ex.getMessage());
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ExceptionResponse("Error occured during validation"+"->"+ex.getMessage(),HttpStatus.BAD_REQUEST.value()));
     }
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ExceptionResponse> handleNoSuchElementException(NoSuchElementException ex){
         log.error(ex.getMessage()+":"+HttpStatus.NOT_FOUND.value());
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ExceptionResponse(ex.getMessage(),HttpStatus.NOT_FOUND.value()));
     }
@@ -35,11 +37,13 @@ public class GlobalExceptionHandler  {
     public ResponseEntity<ExceptionResponse> handleConstraintViolationException(MethodArgumentNotValidException ex) {
 
         log.error(ex.getMessage()+":"+HttpStatus.INTERNAL_SERVER_ERROR.value());
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex.getMessage(),HttpStatus.BAD_REQUEST.value()));
     }
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ExceptionResponse> handleRuntimeException(RuntimeException ex){
         log.error(ex.getMessage()+":"+HttpStatus.INTERNAL_SERVER_ERROR.value());
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new ExceptionResponse(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }

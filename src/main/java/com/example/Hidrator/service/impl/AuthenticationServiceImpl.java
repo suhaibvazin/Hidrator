@@ -107,6 +107,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new AuthenticationResponse(null,"successfully logged out");
     }
 
+    @Override
+    public AuthenticationResponse deleteUser(String username) {
+        User user=authRepository.findByUsername(username).orElseThrow();
+
+        authRepository.delete(user);
+
+        return new AuthenticationResponse(null,"account deleted with username:"+user.getUsername());
+    }
 
 
     private void revokeAllToken(User returnedUser) {

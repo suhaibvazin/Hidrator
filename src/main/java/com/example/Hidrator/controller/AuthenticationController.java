@@ -4,16 +4,24 @@ import com.example.Hidrator.dto.AuthenticationDTO;
 import com.example.Hidrator.dto.AuthenticationResponse;
 import com.example.Hidrator.exception.AuthException;
 import com.example.Hidrator.exception.AuthValidationException;
+import com.example.Hidrator.repository.AuthRepository;
 import com.example.Hidrator.service.AuthenticationService;
 import com.example.Hidrator.util.AuthenticationDTOValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+
+    @DeleteMapping("/delete/{userName}")
+    @Transactional
+    public ResponseEntity<AuthenticationResponse> delete(@PathVariable String userName){
+        return ResponseEntity.ok(authenticationService.deleteUser(userName));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationDTO authenticationDTO) throws AuthException, AuthValidationException {

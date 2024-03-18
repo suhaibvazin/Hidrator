@@ -10,4 +10,6 @@ public interface AuthenticationService {
      AuthenticationResponse resetPassword(AuthenticationDTO request);
      AuthenticationResponse generateResetPasswordToken(AuthenticationDTO request);
      AuthenticationResponse logout(AuthenticationDTO request);
+     AuthenticationResponse deleteUser(String username);
+
 }

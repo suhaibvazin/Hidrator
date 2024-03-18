@@ -12,4 +12,6 @@ public interface AuthRepository extends JpaRepository<User,Long> {
     @Query("SELECT u FROM User u INNER JOIN Token t ON t.user.id = u.id WHERE t.token = :token")
     Optional<User>findByToken(String token);
 
+    boolean deleteByUsername(String username);
+
 }

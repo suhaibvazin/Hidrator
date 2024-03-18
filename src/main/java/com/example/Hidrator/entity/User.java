@@ -36,6 +36,8 @@ public class User implements UserDetails {
     private List<Token> tokens;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserInfo user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
