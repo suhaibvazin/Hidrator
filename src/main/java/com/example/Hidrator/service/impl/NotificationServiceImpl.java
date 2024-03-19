@@ -6,6 +6,7 @@ import com.example.Hidrator.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -27,7 +28,9 @@ public class NotificationServiceImpl implements NotificationService {
         }
         int interval =userInfo.getInterval();
         Instant calculated = modifiedTime.plus(interval, ChronoUnit.MINUTES);
-        if(now.isAfter(calculated)){
+
+        long differenceInSeconds = Math.abs(Duration.between(now, calculated).getSeconds());
+        if(differenceInSeconds<=30){
            return generateMessage(userInfo);
         }else {
             return null;
