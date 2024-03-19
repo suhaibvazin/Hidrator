@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -26,6 +27,6 @@ public class UserInfo {
     private User user;
     private int interval;
     private int waterTarget;
-    private Timestamp modifiedAt;
+    private Instant modifiedAt;
 
 }
