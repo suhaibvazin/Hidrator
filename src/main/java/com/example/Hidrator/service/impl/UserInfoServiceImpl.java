@@ -18,6 +18,11 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     private final AuthRepository authRepository;
 
+    public ApiResponse getUserInfo(String username){
+        UserInfo userInfo= userInfoRepository.findByUsername(username).orElseThrow();
+        return new ApiResponse("userdeatils",userInfo);
+    }
+
     public ApiResponse saveInfo(UserInfoDTO userInfoDTO) throws AuthException {
         //check user in auth before saving
         User user=authRepository.findByUsername(userInfoDTO.getUsername()).orElseThrow();

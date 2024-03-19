@@ -23,4 +23,10 @@ public class UserInfoController {
     public ResponseEntity<ApiResponse> updateInfo(@RequestBody UserInfoDTO userInfoDTO){
         return ResponseEntity.ok(userInfoService.updateUserInfo(userInfoDTO));
     }
+
+    @GetMapping("/getUser/{username}")
+    public ResponseEntity<ApiResponse> getuserInfo(@PathVariable String username){
+        return ResponseEntity.ok(userInfoService.getUserInfo(username));
+    }
+
 }

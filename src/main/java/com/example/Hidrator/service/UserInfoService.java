@@ -8,4 +8,6 @@ public interface UserInfoService {
      ApiResponse saveInfo(UserInfoDTO userInfoDTO) throws AuthException;
 
     ApiResponse updateUserInfo(UserInfoDTO userInfoDTO);
+
+    ApiResponse getUserInfo(String username);
 }
