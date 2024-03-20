@@ -26,8 +26,5 @@ public class NotificationController {
         }
     }
 
-    @PutMapping("/updateProgress")
-    public ResponseEntity<ApiResponse> updateProgress(@RequestBody UserInfoDTO userInfoDTO){
-        return ResponseEntity.ok(userInfoService.updateUserInfo(userInfoDTO));
-    }
+
 }

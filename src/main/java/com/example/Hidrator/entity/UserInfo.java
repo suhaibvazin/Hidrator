@@ -25,8 +25,10 @@ public class UserInfo {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-    private int interval;
-    private int waterTarget;
+    private Integer interval;
+    private Integer serving;
+    private Integer waterTarget;
     private Instant modifiedAt;
+    private Instant completeAt;
 
 }

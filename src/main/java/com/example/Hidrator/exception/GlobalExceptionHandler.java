@@ -40,6 +40,14 @@ public class GlobalExceptionHandler  {
         ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex.getMessage(),HttpStatus.BAD_REQUEST.value()));
     }
+
+    @ExceptionHandler(HidratorException.class)
+    public ResponseEntity<ExceptionResponse> handleConstraintHidratorException(HidratorException ex) {
+
+        log.error(ex.getMessage()+":"+HttpStatus.INTERNAL_SERVER_ERROR.value());
+        ex.printStackTrace();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ex.getMessage(),HttpStatus.BAD_REQUEST.value()));
+    }
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ExceptionResponse> handleRuntimeException(RuntimeException ex){
         log.error(ex.getMessage()+":"+HttpStatus.INTERNAL_SERVER_ERROR.value());

@@ -17,27 +17,19 @@ public class NotificationServiceImpl implements NotificationService {
     public String generateNotification(String username){
 
       UserInfo userInfo = userInfoRepository.findByUsername(username).orElseThrow();
-        Instant modifiedTime = userInfo.getModifiedAt();
-        Instant now = Instant.now();
+        Integer waterQuantity= userInfo.getWaterTarget();
       //interval will be time in minutes
-        if(modifiedTime==null)
+        if(waterQuantity>0)
         {
-            userInfo.setModifiedAt(now);
             userInfoRepository.save(userInfo);
             return generateMessage(userInfo);
-        }
-        int interval =userInfo.getInterval();
-        Instant calculated = modifiedTime.plus(interval, ChronoUnit.MINUTES);
-
-        long differenceInSeconds = Math.abs(Duration.between(now, calculated).getSeconds());
-        if(differenceInSeconds<=30){
-           return generateMessage(userInfo);
         }else {
             return null;
         }
+
     }
 
     private String generateMessage(UserInfo userInfo) {
-        return "lets Hidrate drink "+userInfo.getWaterTarget()/ userInfo.getInterval()+"ml water!! be healthy";
+        return "lets Hidrate drink "+userInfo.getServing()+"ml water!! be healthy";
     }
 }
